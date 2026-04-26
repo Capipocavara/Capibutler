@@ -1,0 +1,26 @@
+{
+  "name": "de.capipocavara.capybutler",
+  "displayName": "Capybutler",
+  "description": "Steam build automation, extension methods, scene management helpers, logging",
+  "version": "0.3.39",
+  "unity": "6000.4",
+  "author": {
+    "name": "Elscherino"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Capipocavara/Capybutler.git"
+  },
+  "dependencies": {
+    "com.unity.addressables": "2.9.1"
+  },
+  "keywords": [
+    "Build",
+    "Upload",
+    "Steam",
+    "Steamworks",
+    "Extension Methods",
+    "Scene Management"
+  ],
+  "license": "MIT"
+}
