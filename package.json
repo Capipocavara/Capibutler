@@ -2,10 +2,10 @@
   "name": "de.capipocavara.capybutler",
   "displayName": "Capybutler",
   "description": "Steam build automation, extension methods, scene management helpers, logging",
-  "version": "0.3.39",
+  "version": "0.3.40",
   "unity": "6000.4",
   "author": {
-    "name": "Elscherino"
+    "name": "Capipocavara"
   },
   "repository": {
     "type": "git",
