@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Capibutler.Utils;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,7 +10,7 @@ namespace Capibutler.Editor.Utils
     public class MonoScriptIconSetter : AssetPostprocessor
     {
         private static readonly Dictionary<string, Texture2D> Icons = new();
-        private static readonly string IconAssetsPath = Voodoo.VoodooPackagePath("de.capipocavara.voodoovara", "Editor/Resources/Icons");
+        private static readonly string IconAssetsPath = PathUtils.PackagePath("Editor/Resources/Icons");
         private const string MonoScriptIconsSessionFlag = "MonoScriptIconsInitialized";
 
         static MonoScriptIconSetter()
@@ -82,11 +81,11 @@ namespace Capibutler.Editor.Utils
             if (importedType == null)
                 return false;
 
-            var match = Voodoo.TypeToIconMap.Keys.FirstOrDefault(entry => importedType.IsSubclassOf(entry) && Icons.ContainsKey(Voodoo.TypeToIconMap[entry]));
+            var match = SettingsUtils.TypeToIconMap.Keys.FirstOrDefault(entry => importedType.IsSubclassOf(entry) && Icons.ContainsKey(SettingsUtils.TypeToIconMap[entry]));
             if (match == null)
                 return false;
 
-            icon = Icons[Voodoo.TypeToIconMap[match]];
+            icon = Icons[SettingsUtils.TypeToIconMap[match]];
             return true;
         }
     }

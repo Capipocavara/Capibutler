@@ -1,5 +1,4 @@
 ﻿using System;
-using Capibutler.Utils;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -37,13 +36,13 @@ namespace Capibutler.Events.Base
         // [HorizontalGroup("Event", MaxWidth = 25)]
         // [HideLabel]
         // [ShowInInspector]
-        private bool Show {
-            get => SettingsUtils.GetShowGenericEventDebugger;
-            set {
-                SettingsUtils.SetShowGenericEventDebugger(value);
-                InlineEditorStateChanged?.Invoke(value);
-            }
-        }
+        // private bool Show {
+        //     get => SettingsUtils.GetShowGenericEventDebugger;
+        //     set {
+        //         SettingsUtils.SetShowGenericEventDebugger(value);
+        //         InlineEditorStateChanged?.Invoke(value);
+        //     }
+        // }
 
         // [HideInEditorMode]
         // [ShowIf("@" + nameof(source) + " != null && " + nameof(Show) + " == true")]

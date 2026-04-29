@@ -3,13 +3,13 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Capibutler.Utils;
 using Microsoft.CSharp;
-using Sirenix.Utilities;
 using UnityEditor;
 
-namespace Capibutler.Editor.CodeGenerator
+namespace Capibutler.Editor.Utils
 {
-    public static class CodeGeneratorUtils
+    public static class CodeGenUtils
     {
         // Type resolver
         private static List<Type> typeCache;
@@ -118,7 +118,7 @@ namespace Capibutler.Editor.CodeGenerator
             nameSpaces = new List<string>();
 
             // null for empty strings
-            if (typeName.IsNullOrWhitespace())
+            if (typeName.IsNullOrWhiteSpace())
                 return null;
 
             // handle arrays
@@ -253,7 +253,7 @@ namespace Capibutler.Editor.CodeGenerator
 
         private static string BuildPrettyIdentifier(string typeName)
         {
-            if (typeName.IsNullOrWhitespace())
+            if (typeName.IsNullOrWhiteSpace())
                 return "";
 
             var isArray = false;

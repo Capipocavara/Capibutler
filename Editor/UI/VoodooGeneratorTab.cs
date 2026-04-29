@@ -1,4 +1,4 @@
-﻿using Sirenix.Utilities;
+﻿using Capibutler.Utils;
 using UnityEngine.UIElements;
 
 namespace Capibutler.Editor.UI
@@ -45,7 +45,7 @@ namespace Capibutler.Editor.UI
 
         protected virtual void Validate()
         {
-            if (Name.value.IsNullOrWhitespace() || !System.CodeDom.Compiler.CodeGenerator.IsValidLanguageIndependentIdentifier(Name.value)) {
+            if (Name.value.IsNullOrWhiteSpace() || !System.CodeDom.Compiler.CodeGenerator.IsValidLanguageIndependentIdentifier(Name.value)) {
                 Name.AddToClassList("invalid");
                 IsValid = false;
             } else {

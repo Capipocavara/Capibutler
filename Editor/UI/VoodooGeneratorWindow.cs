@@ -1,6 +1,5 @@
-using Capibutler.Editor.CodeGenerator;
+using Capibutler.Editor.Utils;
 using Capibutler.Events.Base;
-using Capibutler.Utils;
 using Capibutler.Values.Base;
 using UnityEditor;
 using UnityEngine;
@@ -74,7 +73,7 @@ namespace Capibutler.Editor.UI
             window.SetStartTab(activeAtStart);
             window.Show();
 
-            CodeGeneratorUtils.InitTypeCache();
+            CodeGenUtils.InitTypeCache();
         }
 
         private void SetStartTab(string tabName)

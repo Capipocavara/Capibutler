@@ -1,6 +1,6 @@
 using System;
 using Capibutler.Editor.CodeGenerator;
-using Capibutler.Utils;
+using Capibutler.Editor.Utils;
 using UnityEditor;
 using UnityEngine.UIElements;
 
@@ -22,10 +22,10 @@ namespace Capibutler.Editor.UI
 
         private void OnPayloadChanged(ChangeEvent<string> text)
         {
-            valuePayloadType = CodeGeneratorUtils.ResolveTypeFromString(text.newValue, out nameSpaces);
+            valuePayloadType = CodeGenUtils.ResolveTypeFromString(text.newValue, out nameSpaces);
             if (valuePayloadType != null) {
                 var prettyName = valuePayloadType.PrettyName();
-                valuePayload.cursorIndex = CodeGeneratorUtils.AdjustCursor(text.newValue, prettyName, valuePayload.cursorIndex);
+                valuePayload.cursorIndex = CodeGenUtils.AdjustCursor(text.newValue, prettyName, valuePayload.cursorIndex);
                 valuePayload.SetValueWithoutNotify(prettyName);
                 valuePayload.SelectNone();
             }
@@ -40,7 +40,7 @@ namespace Capibutler.Editor.UI
         {
             var suggestion = "CustomValue";
             if (valuePayloadType != null)
-                suggestion = CodeGeneratorUtils.PrettyIdentifier(valuePayload.value) + "Value";
+                suggestion = CodeGenUtils.PrettyIdentifier(valuePayload.value) + "Value";
 
             Name.value = suggestion;
         }
@@ -66,10 +66,10 @@ namespace Capibutler.Editor.UI
             if (!IsValid)
                 return;
 
-            var outputPath = Voodoo.VoodooAssetPath("Values");
+            var outputPath = PathUtils.CapibutlerAssetPath("Values");
 
             ValueTemplate valueTemplate = new(outputPath) {
-                Namespace = Voodoo.AssetPathToNamespace(outputPath),
+                Namespace = PathUtils.AssetPathToNamespace(outputPath),
                 Imports = nameSpaces,
                 ValueName = Name.value,
                 ValueType = valuePayload.value
@@ -77,7 +77,7 @@ namespace Capibutler.Editor.UI
 
             var referenceName = Name.value.Replace("Value", "") + "Reference";
             ValueReferenceTemplate valueReferenceTemplate = new(outputPath) {
-                Namespace = Voodoo.AssetPathToNamespace(outputPath),
+                Namespace = PathUtils.AssetPathToNamespace(outputPath),
                 Imports = nameSpaces,
                 ValueName = Name.value,
                 ValueReferenceName = referenceName,

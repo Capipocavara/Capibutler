@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Capibutler.Editor.CodeGenerator
+namespace Capibutler.Editor.Utils
 {
-    public abstract class CodeGeneratorBase
+    public abstract class FileGenerator
     {
         protected readonly StringBuilder Generator = new();
         private readonly List<int> indentLengths = new();
@@ -13,14 +13,10 @@ namespace Capibutler.Editor.CodeGenerator
         private string currentIndentField = "";
         private bool endsWithNewline;
 
-        protected CodeGeneratorBase(string path)
-        {
-            outputPath = path;
-        }
+        protected FileGenerator(string path) => outputPath = path;
 
         protected abstract string FileName { get; }
-        
-        private string FullFileName => Path.Combine(outputPath, FileName);
+        public string FullFileName => Path.Combine(outputPath, FileName);
 
         protected void Write(string textToAppend)
         {

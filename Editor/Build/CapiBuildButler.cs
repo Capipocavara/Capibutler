@@ -15,7 +15,7 @@ using UnityEngine.UIElements;
 
 namespace Capibutler.Editor.Build
 {
-    public class BuildButler : EditorWindow
+    public class CapiBuildButler : EditorWindow
     {
         public enum BuildType
         {
@@ -47,10 +47,10 @@ namespace Capibutler.Editor.Build
         private List<ScriptingDefineSymbol> scriptingDefines;
         private ListView scriptingDefinesListView;
 
-        [MenuItem("Capipocavara/Build Capibutler", false, priority = 50)]
+        [MenuItem("Capipocavara/CapiBuild butler", false, priority = 50)]
         private static void ShowWindow()
         {
-            var window = GetWindow<BuildButler>(false, "Build Capibutler");
+            var window = GetWindow<CapiBuildButler>(false, "CapiBuild Butler");
             window.minSize = new Vector2(520f, 400f);
             window.maxSize = new Vector2(700f, 610f);
             window.Show();
@@ -59,12 +59,12 @@ namespace Capibutler.Editor.Build
         public void CreateGUI()
         {
             var root = rootVisualElement;
-            root.styleSheets.Add(AssetDatabase.LoadAssetAtPath<StyleSheet>(PathUtils.PackagePath("de.capipocavara.capibutler", "Editor/Build/BuildButler.uss")));
-            root.Add(AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(PathUtils.PackagePath("de.capipocavara.capibutler", "Editor/Build/BuildButler.uxml")).Instantiate());
+            root.styleSheets.Add(AssetDatabase.LoadAssetAtPath<StyleSheet>(PathUtils.PackagePath("Editor/Build/Capibutler.uss")));
+            root.Add(AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(PathUtils.PackagePath("Editor/Build/CapiBuildButler.uxml")).Instantiate());
 
             // Build Configuration
             branchField = root.Q<EnumField>("buildBranch");
-            branchField.RegisterValueChangedCallback(changeEvent => EditorPrefs.SetString(PathUtils.GetEditorKey("branch"), changeEvent.newValue.ToString()));
+            branchField.RegisterValueChangedCallback(changeEvent => SettingsUtils.SetString("branch", changeEvent.newValue.ToString()));
             descriptionField = root.Q<TextField>("buildDescription");
             descriptionField.RegisterValueChangedCallback(OnTextFieldChanged);
             appIdField = root.Q<TextField>("buildAppId");
@@ -72,15 +72,15 @@ namespace Capibutler.Editor.Build
             depotIdField = root.Q<TextField>("buildDepotId");
             depotIdField.RegisterValueChangedCallback(OnTextFieldChanged);
             uploadToggle = root.Q<Toggle>("buildUpload");
-            uploadToggle.RegisterValueChangedCallback(changeEvent => EditorPrefs.SetBool(PathUtils.GetEditorKey("upload"), changeEvent.newValue));
+            uploadToggle.RegisterValueChangedCallback(changeEvent => SettingsUtils.SetBool("upload", changeEvent.newValue));
 
-            if (Enum.TryParse<BuildType>(EditorPrefs.GetString(PathUtils.GetEditorKey("branch"), nameof(BuildType.Development)), out var parsedValue))
+            if (Enum.TryParse<BuildType>(SettingsUtils.GetString("branch", nameof(BuildType.Development)), out var parsedValue))
                 branchField.SetValueWithoutNotify(parsedValue);
 
-            descriptionField.SetValueWithoutNotify(EditorPrefs.GetString(PathUtils.GetEditorKey(descriptionField.name), ""));
-            appIdField.SetValueWithoutNotify(EditorPrefs.GetString(PathUtils.GetEditorKey(appIdField.name), ""));
-            depotIdField.SetValueWithoutNotify(EditorPrefs.GetString(PathUtils.GetEditorKey(depotIdField.name), ""));
-            uploadToggle.SetValueWithoutNotify(EditorPrefs.GetBool(PathUtils.GetEditorKey("upload"), false));
+            descriptionField.SetValueWithoutNotify(SettingsUtils.GetString(descriptionField.name));
+            appIdField.SetValueWithoutNotify(SettingsUtils.GetString(appIdField.name));
+            depotIdField.SetValueWithoutNotify(SettingsUtils.GetString(depotIdField.name));
+            uploadToggle.SetValueWithoutNotify(SettingsUtils.GetBool("upload"));
 
 
             // Scripting Defines
@@ -103,9 +103,9 @@ namespace Capibutler.Editor.Build
             steamCmdPathField.RegisterValueChangedCallback(OnTextFieldChanged);
             root.Q<Button>("steamCmdPathBrowse").clicked += () => { OnFileSelect(steamCmdPathField, "exe"); };
 
-            steamLoginField.SetValueWithoutNotify(EditorPrefs.GetString(PathUtils.GetEditorKey(steamLoginField.name), ""));
-            steamPasswordField.SetValueWithoutNotify(EditorPrefs.GetString(PathUtils.GetEditorKey(steamPasswordField.name), ""));
-            steamCmdPathField.SetValueWithoutNotify(EditorPrefs.GetString(PathUtils.GetEditorKey(steamCmdPathField.name), ""));
+            steamLoginField.SetValueWithoutNotify(SettingsUtils.GetString(steamLoginField.name));
+            steamPasswordField.SetValueWithoutNotify(SettingsUtils.GetString(steamPasswordField.name));
+            steamCmdPathField.SetValueWithoutNotify(SettingsUtils.GetString(steamCmdPathField.name));
             root.Q<Button>("startBuild").clicked += OnStartBuildClicked;
             return;
 
@@ -125,8 +125,8 @@ namespace Capibutler.Editor.Build
                     debugs += (index > 0 ? "|" : "") + scriptingDefines[index].Debug;
                 }
 
-                EditorPrefs.SetString(PathUtils.GetEditorKey($"{nameof(scriptingDefines)}__symbols"), names);
-                EditorPrefs.SetString(PathUtils.GetEditorKey($"{nameof(scriptingDefines)}__debug"), debugs);
+                SettingsUtils.SetString($"{nameof(scriptingDefines)}__symbols", names);
+                SettingsUtils.SetString($"{nameof(scriptingDefines)}__debug", debugs);
             } catch (Exception) {
                 LogButler.Warning("Saving define symbols failed");
             }
@@ -136,8 +136,8 @@ namespace Capibutler.Editor.Build
         {
             var result = new List<ScriptingDefineSymbol>();
 
-            var names = EditorPrefs.GetString(PathUtils.GetEditorKey($"{nameof(scriptingDefines)}__symbols"), "");
-            var debugs = EditorPrefs.GetString(PathUtils.GetEditorKey($"{nameof(scriptingDefines)}__debug"), "");
+            var names = SettingsUtils.GetString($"{nameof(scriptingDefines)}__symbols");
+            var debugs = SettingsUtils.GetString($"{nameof(scriptingDefines)}__debug");
 
             var defineName = names.Split('|');
             var defineDebug = debugs.Split('|');
@@ -158,7 +158,7 @@ namespace Capibutler.Editor.Build
             if (changeEvent.target is not TextField textField)
                 return;
 
-            EditorPrefs.SetString(PathUtils.GetEditorKey(textField.name), textField.value);
+            SettingsUtils.SetString(textField.name, textField.value);
         }
 
         private static void OnFileSelect(TextField textField, string extension)
@@ -201,7 +201,7 @@ namespace Capibutler.Editor.Build
             app.Create();
             depot.Create();
 
-            EditorPrefs.SetString(PathUtils.GetEditorKey("appIdScriptPath"), app.FullFileName);
+            SettingsUtils.SetString("appIdScriptPath", app.FullFileName);
         }
 
         private void SetStackTraceLogTypesForBranch(BuildType buildType)

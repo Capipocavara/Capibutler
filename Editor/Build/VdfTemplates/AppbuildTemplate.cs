@@ -6,7 +6,7 @@ namespace Capibutler.Editor.Build.VdfTemplates
     public sealed class AppbuildTemplate : FileGenerator
     {
         public int AppId;
-        public BuildButler.BuildType BuildType;
+        public CapiBuildButler.BuildType BuildType;
         public int DepotId;
         public string Description;
 
@@ -17,9 +17,9 @@ namespace Capibutler.Editor.Build.VdfTemplates
         protected override string TransformText()
         {
             var buildDescription = BuildType switch {
-                BuildButler.BuildType.Development => "[Development]",
-                BuildButler.BuildType.Beta => "[Beta]",
-                BuildButler.BuildType.ReleaseCandidate => "[Release Candidate]",
+                CapiBuildButler.BuildType.Development => "[Development]",
+                CapiBuildButler.BuildType.Beta => "[Beta]",
+                CapiBuildButler.BuildType.ReleaseCandidate => "[Release Candidate]",
                 _ => "[Public]"
             } + (string.IsNullOrWhiteSpace(Description) ? "" : $" {Description}");
 

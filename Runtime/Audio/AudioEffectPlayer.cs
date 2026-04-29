@@ -35,12 +35,10 @@ namespace Capibutler.Audio
 
         [Range(1f, 500f)]
         public float minDistance = 1f;
-
-
+        
         [Range(1f, 500f)]
         public float maxDistance = 500f;
-
-
+        
         public bool loop;
 
         private AudioSource playingSource;
@@ -48,13 +46,11 @@ namespace Capibutler.Audio
         [SerializeField]
         [HideInInspector]
         private bool looping;
-
-#if UNITY_EDITOR
+        
         private void OnValidate()
         {
             looping = loop && EffectIsAudioClip;
         }
-#endif
 
         private void LateUpdate()
         {
@@ -191,7 +187,7 @@ namespace Capibutler.Audio
         // [ButtonGroup()]
         // [Button(SdfIconType.PlayFill, "")]
         // [HideInPlayMode]
-        private void Preview()
+        public void Preview()
         {
             if (previewSource == null)
             {
@@ -226,13 +222,13 @@ namespace Capibutler.Audio
         // [Button(SdfIconType.StopFill, "")]
         // [EnableIf(nameof(PreviewIsPlaying))]
         // [HideInPlayMode]
-        private void StopPreview()
+        public void StopPreview()
         {
             if (PreviewIsPlaying)
                 previewSource.Stop();
         }
 
-        private bool PreviewIsPlaying => previewSource != null && previewSource.isPlaying;
+        private static bool PreviewIsPlaying => previewSource != null && previewSource.isPlaying;
         private bool EffectIsAudioClip => effect is AudioClip;
 #endif
     }

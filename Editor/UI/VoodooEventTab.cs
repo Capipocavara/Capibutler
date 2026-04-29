@@ -4,7 +4,6 @@ using System.Linq;
 using Capibutler.Editor.CodeGenerator;
 using Capibutler.Editor.Utils;
 using Capibutler.Utils;
-using Sirenix.Utilities;
 using UnityEditor;
 using UnityEngine.UIElements;
 
@@ -30,10 +29,10 @@ namespace Capibutler.Editor.UI
 
         private void OnPayloadChanged(int index, string text)
         {
-            eventPayloadTypes[index] = CodeGeneratorUtils.ResolveTypeFromString(text, out nameSpaces[index]);
+            eventPayloadTypes[index] = CodeGenUtils.ResolveTypeFromString(text, out nameSpaces[index]);
             if (eventPayloadTypes[index] != null) {
                 var prettyName = eventPayloadTypes[index].PrettyName();
-                eventPayloads[index].cursorIndex = CodeGeneratorUtils.AdjustCursor(text, prettyName, eventPayloads[index].cursorIndex);
+                eventPayloads[index].cursorIndex = CodeGenUtils.AdjustCursor(text, prettyName, eventPayloads[index].cursorIndex);
                 eventPayloads[index].SetValueWithoutNotify(prettyName);
                 eventPayloads[index].SelectNone();
             }
@@ -51,10 +50,10 @@ namespace Capibutler.Editor.UI
                 if (eventPayloadTypes[i] == null)
                     continue;
 
-                suggestion += CodeGeneratorUtils.PrettyIdentifier(eventPayloads[i].value);
+                suggestion += CodeGenUtils.PrettyIdentifier(eventPayloads[i].value);
             }
 
-            if (suggestion.IsNullOrWhitespace())
+            if (suggestion.IsNullOrWhiteSpace())
                 suggestion = "Custom";
 
             Name.value = suggestion + "Event";
@@ -64,7 +63,7 @@ namespace Capibutler.Editor.UI
         {
             IsValid = true;
             for (var i = 0; i < 4; ++i) {
-                var unused = eventPayloads[i].value.IsNullOrWhitespace();
+                var unused = eventPayloads[i].value.IsNullOrWhiteSpace();
                 if (unused || eventPayloadTypes[i] != null) {
                     eventPayloads[i].tooltip = unused ? "" : $"Type: {eventPayloadTypes[i].FullName}";
                     eventPayloads[i].RemoveFromClassList("invalid");
@@ -83,9 +82,9 @@ namespace Capibutler.Editor.UI
             if (!IsValid)
                 return;
 
-            var payloads = eventPayloads.Select(textField => textField.value).Where(item => !item.IsNullOrWhitespace()).ToList().ConvertAll(item => item.Replace(" ", "")).ToArray();
+            var payloads = eventPayloads.Select(textField => textField.value).Where(item => !item.IsNullOrWhiteSpace()).ToList().ConvertAll(item => item.Replace(" ", "")).ToArray();
             var includes = nameSpaces.Where(nameSpace => nameSpace != null).Aggregate(new List<string>(), (strings, list) => list.Union(strings).ToList()).Distinct().ToArray();
-            var outputPath = Voodoo.VoodooAssetPath("Events");
+            var outputPath = PathUtils.CapibutlerAssetPath("Events");
 
             EventTemplate eventTemplate = new(outputPath) {
                 Namespace = PathUtils.AssetPathToNamespace(outputPath),

@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using Capibutler.Editor.Utils;
 using Capibutler.Utils;
-using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 
@@ -15,26 +14,26 @@ namespace Capibutler.Editor.Build
 
         public void OnPostprocessBuild(BuildReport report)
         {
-            if (!EditorPrefs.GetBool(PathUtils.GetEditorKey("upload"), false)) {
+            if (!SettingsUtils.GetBool("upload")) {
                 LogButler.Info("[PostprocessSteamPipe] Skipping SteamPipe upload");
                 return;
             }
 
-            var processName = EditorPrefs.GetString(PathUtils.GetEditorKey("steamCmdPath"), "");
+            var processName = SettingsUtils.GetString("steamCmdPath");
             if (!File.Exists(processName)) {
                 LogButler.Error("[PostprocessSteamPipe] 'steamcmd.exe' not found");
                 return;
             }
 
-            if (!(EditorPrefs.HasKey(PathUtils.GetEditorKey("steamLogin")) && EditorPrefs.HasKey(PathUtils.GetEditorKey("steamPassword")))) {
+            if (!(SettingsUtils.HasKey("steamLogin") && SettingsUtils.HasKey("steamPassword"))) {
                 LogButler.Error("[PostprocessSteamPipe] Steam Login Information not found");
                 return;
             }
 
-            var steamLogin = EditorPrefs.GetString(PathUtils.GetEditorKey("steamLogin"));
-            var steamPassword = EditorPrefs.GetString(PathUtils.GetEditorKey("steamPassword"));
+            var steamLogin = SettingsUtils.GetString("steamLogin");
+            var steamPassword = SettingsUtils.GetString("steamPassword");
 
-            var buildScriptName = EditorPrefs.GetString(PathUtils.GetEditorKey("appIdScriptPath"), "");
+            var buildScriptName = SettingsUtils.GetString("appIdScriptPath");
             if (!File.Exists(buildScriptName)) {
                 LogButler.Error($"[PostprocessSteamPipe] App build script '{buildScriptName}' not found");
                 return;
@@ -44,7 +43,7 @@ namespace Capibutler.Editor.Build
 
             var steamPipe = new Process {
                 StartInfo = new ProcessStartInfo {
-                    FileName = EditorPrefs.GetString(PathUtils.GetEditorKey("steamCmdPath"), ""),
+                    FileName = SettingsUtils.GetString("steamCmdPath"),
                     Arguments = arguments,
                     WorkingDirectory = Path.GetDirectoryName(processName) ?? "",
                     RedirectStandardOutput = true,

@@ -13,8 +13,8 @@ namespace Capibutler.Editor.Utils
         private static bool enterPlayModeOverride;
 
         public static bool DefaultPlayModeOverrideEnabled {
-            get => EditorPrefs.GetBool(PathUtils.GetEditorKey(nameof(DefaultPlayModeOverrideEnabled)), false);
-            private set => EditorPrefs.SetBool(PathUtils.GetEditorKey(nameof(DefaultPlayModeOverrideEnabled)), value);
+            get => SettingsUtils.GetBool(nameof(DefaultPlayModeOverrideEnabled));
+            private set => SettingsUtils.SetBool(nameof(DefaultPlayModeOverrideEnabled), value);
         }
 
         static StartUpPlayMode()

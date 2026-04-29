@@ -1,22 +1,24 @@
-﻿namespace Capibutler.Editor.CodeGenerator
+﻿using Capibutler.Editor.Build;
+using Capibutler.Editor.Utils;
+
+namespace Capibutler.Editor.CodeGenerator
 {
-    public class ValueReferenceTemplate : CodeGeneratorBase
+    public class ValueTemplate : FileGenerator
     {
         public string[] Imports;
         public string Namespace;
         public string ValueName;
-        public string ValueReferenceName;
-        public string ValueReferenceType;
+        public string ValueType;
 
-        public ValueReferenceTemplate(string path) : base(path) { }
+        public ValueTemplate(string path) : base(path) { }
 
-        protected override string FileName => ValueReferenceName + ".cs";
+        protected override string FileName => ValueName + ".cs";
 
         protected override string TransformText()
         {
-            WriteLine("using System;");
+            WriteLine("using UnityEngine;");
             foreach (var nameSpace in Imports) {
-                if (nameSpace is "System" or "" or null)
+                if (nameSpace is "UnityEngine" or "" or null)
                     continue;
 
                 WriteLine($"using {nameSpace};");
@@ -30,8 +32,8 @@
                 PushIndent();
             }
 
-            WriteLine("[Serializable]");
-            WriteLine($"public class {ValueReferenceName} : GenericReference<{ValueName}, {ValueReferenceType}> {{ }}");
+            WriteLine($"[CreateAssetMenu(fileName = \"{ValueName}\", menuName = \"Voodoo/Values/{ValueName}\")]");
+            WriteLine($"public class {ValueName} : GenericValue<{ValueType}> {{ }}");
             if (!string.IsNullOrEmpty(Namespace)) {
                 PopIndent();
                 Write("}");

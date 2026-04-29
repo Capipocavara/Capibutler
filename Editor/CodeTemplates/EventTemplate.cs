@@ -1,6 +1,9 @@
-﻿namespace Capibutler.Editor.CodeGenerator
+﻿using Capibutler.Editor.Build;
+using Capibutler.Editor.Utils;
+
+namespace Capibutler.Editor.CodeGenerator
 {
-    public class EventTemplate : CodeGeneratorBase
+    public class EventTemplate : FileGenerator
     {
         public string EventName;
         public string[] EventPayloads;
